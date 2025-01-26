@@ -3,7 +3,6 @@ package components
 import (
 	"context"
 	"io"
-	"os"
 	"strconv"
 
 	"github.com/gdamore/tcell/v2"
