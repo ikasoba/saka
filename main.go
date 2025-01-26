@@ -241,6 +241,13 @@ func main() {
 			case tcell.KeyCtrlX:
 				app.Stop()
 				return nil
+			case tcell.KeyCtrlS:
+				err := os.WriteFile(fileName, []byte(textarea.Text.String()), os.ModePerm)
+				if err != nil {
+					panic(err)
+				}
+
+				return nil
 			}
 
 			return event
