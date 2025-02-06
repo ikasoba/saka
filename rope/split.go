@@ -9,6 +9,8 @@ func (n *RopeLeafNode) Split(offset int) (RopeNode, RopeNode) {
 		return &RopeEmptyNode{}, &RopeEmptyNode{}
 	}
 
+	offset = min(offset, len(n.text))
+
 	l, r := n.text[:offset], n.text[offset:]
 
 	return &RopeLeafNode{countLF(l), l}, &RopeLeafNode{countLF(r), r}

@@ -1,5 +1,7 @@
 package rope
 
+import "io"
+
 type RopeNodeKind int
 
 const (
@@ -20,6 +22,7 @@ type RopeNode interface {
 	GetLineNumber(offset int) int
 	GetLineStart(line int) int
 	GetLineEnd(line int) int
+	PrettyPrint(w io.Writer, indent string)
 }
 
 type RopeEmptyNode struct{}
