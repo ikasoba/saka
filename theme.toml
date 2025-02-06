@@ -1,0 +1,24 @@
+foreground = 231
+background = 235
+selection_background = 240
+cursor_color = 245
+line_number_background = 235
+line_number_foreground = 245
+active_line_number_background = 235
+active_line_number_foreground = 250
+
+diagnostic_line_number_background = [
+  52,
+  11,
+  17,
+  53  
+]
+
+[highlights]
+constant = 147
+comment = 245
+keyword = 153
+string = 216
+function = 115
+type = 115
+"variable.parameter" = 115

@@ -7,6 +7,7 @@ require (
 	github.com/ebitengine/purego v0.8.2
 	github.com/gdamore/tcell/v2 v2.7.1
 	github.com/k0kubun/pp v3.0.1+incompatible
+	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/mattn/go-runewidth v0.0.16
 	github.com/rivo/tview v0.0.0-20241227133733-17b7edb88c57
 	github.com/tree-sitter/go-tree-sitter v0.24.0
