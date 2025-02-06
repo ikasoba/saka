@@ -1,6 +1,6 @@
 CGO_ENABLED=1
 
-ifeq ($(OS),windows)
+ifeq ($(OS),Windows_NT)
 	GOOS=windows
 	CC=x86_64-w64-mingw32-gcc
 	CXX=x86_64-w64-mingw32-g++
