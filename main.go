@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"debug/buildinfo"
 	"fmt"
 	"os"
 	"os/exec"
@@ -11,12 +12,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/BurntSushi/toml"
 	"github.com/gdamore/tcell/v2"
 	"github.com/ikasoba/saka/components"
 	"github.com/ikasoba/saka/config"
+	"github.com/ikasoba/saka/manager"
 	"github.com/ikasoba/saka/rope"
-	"github.com/ikasoba/saka/theme"
 	"github.com/ikasoba/saka/treesitter"
 	"github.com/ikasoba/saka/util"
 	"github.com/rivo/tview"
@@ -25,20 +25,6 @@ import (
 	"go.lsp.dev/uri"
 	"go.uber.org/zap"
 )
-
-func LoadConfig() (conf config.Config, theme theme.EditorTheme) {
-	exefile, _ := os.Executable()
-
-	configPath := os.Getenv("SAKA_CONFIG_DIR")
-	if configPath == "" {
-		configPath = filepath.Dir(exefile)
-	}
-
-	toml.DecodeFile(filepath.Join(configPath, "config.toml"), &conf)
-	toml.DecodeFile(filepath.Join(configPath, "theme.toml"), &theme)
-
-	return conf, theme
-}
 
 func FindMatchedLanguage(file string, langs map[string]config.LanguageConfig) (name string, conf config.LanguageConfig, ok bool) {
 	for name, lang := range langs {
@@ -58,22 +44,58 @@ func FindMatchedLanguage(file string, langs map[string]config.LanguageConfig) (n
 }
 
 func main() {
-	conf, theme := LoadConfig()
-
-	app := tview.NewApplication()
-
-	style := tcell.StyleDefault.Background(theme.Background.Color()).Foreground(theme.Foreground.Color())
+	conf, theme := config.Load()
 
 	fileName := ""
+
 	if len(os.Args) == 2 {
-		fileName = os.Args[1]
+		if os.Args[1] == "-e" || os.Args[1] == "--show-environment" {
+			fmt.Println("SAKA_CONFIG_DIR=" + config.GetConfigDir())
+
+			return
+		} else if os.Args[1] == "--install-grammar" {
+			for _, g := range conf.Grammars {
+				fmt.Println("Install", "repo:", g.Repo, "rev:", g.Rev)
+
+				err := manager.InstallGrammar(g.Repo, g.Rev)
+
+				if err != nil {
+					panic(err)
+				}
+			}
+
+			return
+		} else {
+			fileName = os.Args[1]
+		}
 	} else {
-		fmt.Fprintln(os.Stderr, "file name required.")
+		exefile, _ := os.Executable()
+		info, _ := buildinfo.ReadFile(exefile)
+
+		revision := ""
+
+		for _, x := range info.Settings {
+			if x.Key == "vcs.revision" {
+				revision = x.Value
+			}
+		}
+
+		fmt.Println("Saka (" + revision + ")\n")
+		fmt.Println("Usage:", os.Args[0], "<filename>")
+		fmt.Println("  Open file\n")
+		fmt.Println("Usage:", os.Args[0], "(-e|--show-environment)")
+		fmt.Println("  Show environment variables\n")
+		fmt.Println("Usage:", os.Args[0], "--install-grammar")
+		fmt.Println("  Install grammar from config")
 
 		os.Exit(1)
 
 		return
 	}
+
+	app := tview.NewApplication()
+
+	style := tcell.StyleDefault.Background(theme.Background.Color()).Foreground(theme.Foreground.Color())
 
 	statusText := tview.NewTextView().SetTextStyle(style.Reverse(true)).SetTextAlign(tview.AlignRight)
 
@@ -146,12 +168,7 @@ func main() {
 
 	name, lang, ok := FindMatchedLanguage(fileName, conf.Languages)
 	if ok {
-		exefile, _ := os.Executable()
-
-		configPath := os.Getenv("SAKA_CONFIG_DIR")
-		if configPath == "" {
-			configPath = filepath.Dir(exefile)
-		}
+		configPath := config.GetConfigDir()
 
 		dylibExtname := ".so"
 		switch runtime.GOOS {

@@ -7,5 +7,17 @@ A Cute & Easy TUI text editor inspired by GNU Nano.
 
 # Releases
 
-
 https://github.com/ikasoba/saka/releases
+
+# Usage
+
+```
+Usage: ./saka <filename>
+  Open file
+
+Usage: ./saka (-e|--show-environment)
+  Show environment variables
+
+Usage: ./saka --install-grammar
+  Install grammar from config
+```

@@ -1,0 +1,8 @@
+[languages.go]
+server_command = "gopls"
+arguments = ["serve"]
+patterns = ["\\.go$"]
+
+[grammars.go]
+repo = "https://github.com/tree-sitter/tree-sitter-go"
+rev = "v0.23.4"
