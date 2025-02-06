@@ -9,5 +9,5 @@ func (n *RopeLeafNode) Runes() []rune {
 }
 
 func (n *RopeParentNode) Runes() []rune {
-	return append(n.left.Runes(), n.right.Runes()...)
+	return append(append([]rune{}, n.left.Runes()...), n.right.Runes()...)
 }
