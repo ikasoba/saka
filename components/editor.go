@@ -851,7 +851,7 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 			}
 
 		default:
-			if event.Modifiers() == 0 {
+			if event.Modifiers() & ^tcell.ModShift == 0 {
 				if !e.cursor.hasSelection {
 					e.Text = e.Text.Insert(e.cursor.startSelection, string(event.Rune()))
 
