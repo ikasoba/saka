@@ -72,15 +72,7 @@ func main() {
 		exefile, _ := os.Executable()
 		info, _ := buildinfo.ReadFile(exefile)
 
-		revision := ""
-
-		for _, x := range info.Settings {
-			if x.Key == "vcs.revision" {
-				revision = x.Value
-			}
-		}
-
-		fmt.Println("Saka (" + revision + ")\n")
+		fmt.Println("Saka (" + info.Main.Version + ")\n")
 		fmt.Println("Usage:", os.Args[0], "<filename>")
 		fmt.Println("  Open file\n")
 		fmt.Println("Usage:", os.Args[0], "(-e|--show-environment)")
