@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"debug/buildinfo"
 	"fmt"
 	"os"
 	"os/exec"
@@ -73,6 +72,8 @@ func main() {
 
 			d := config.GetConfigDir()
 
+			os.MkdirAll(d, os.ModePerm)
+
 			confFd, err := os.Create(filepath.Join(d, "config.toml"))
 			if err != nil {
 				panic(err)
@@ -96,10 +97,7 @@ func main() {
 			fileName = os.Args[1]
 		}
 	} else {
-		exefile, _ := os.Executable()
-		info, _ := buildinfo.ReadFile(exefile)
-
-		fmt.Println("Saka (" + info.Main.Version + ")\n")
+		fmt.Println("Saka (" + manager.GetVersion() + ")\n")
 		fmt.Println("Usage:", os.Args[0], "<filename>")
 		fmt.Println("  Open file\n")
 		fmt.Println("Usage:", os.Args[0], "(-e|--show-environment)")

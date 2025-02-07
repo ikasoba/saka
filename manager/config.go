@@ -14,7 +14,9 @@ func FetchDefaultConfigs() (config io.ReadCloser, theme io.ReadCloser, err error
 
 	base := ""
 
-	if info.Main.Version == "(devel)" {
+	v := GetVersion()
+
+	if v == "(devel)" {
 		base, err = url.JoinPath("https://raw.githubusercontent.com/ikasoba/saka/refs/heads/main")
 		if err != nil {
 			return nil, nil, err

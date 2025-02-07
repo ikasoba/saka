@@ -10,5 +10,7 @@ else
 	CXX=g++
 endif
 
+VERSION=$(shell git describe --tag --abbrev=0)
+
 build:
-	@CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) CC=$(CC) GXX=$(CXX) go build .
+	@CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) CC=$(CC) GXX=$(CXX) go build -ldflags "-X github.com/ikasoba/saka/manager.version=$(VERSION)" .
