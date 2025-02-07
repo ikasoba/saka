@@ -19,12 +19,15 @@ https://github.com/ikasoba/saka/releases
 # Usage
 
 ```
-Usage: ./saka <filename>
+Usage: saka <filename>
   Open file
 
-Usage: ./saka (-e|--show-environment)
+Usage: saka (-e|--show-environment)
   Show environment variables
 
-Usage: ./saka --install-grammar
+Usage: saka --install-grammar
   Install grammar from config
+
+Usage: saka --fetch-default-config
+  Fetch default config
 ```
