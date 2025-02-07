@@ -12,6 +12,23 @@ A Cute & Easy TUI text editor inspired by GNU Nano.
 go install github.com/ikasoba/saka@latest
 ```
 
+## Setup
+In the initial state, no configuration file exists, so a default configuration file must be obtained.
+```sh
+saka --fetch-default-config
+```
+
+The default configuration file has a tree-sitter parser for golang configured, and this parser must be installed in your editor to use highlighting.
+(However, the tree-sitter cli is required).
+```sh
+saka --install-grammar
+```
+
+You can check the location of the configuration file with the following command.
+```sh
+saka -e
+```
+
 # Releases
 
 https://github.com/ikasoba/saka/releases
