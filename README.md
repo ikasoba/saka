@@ -3,8 +3,10 @@
 A Cute & Easy TUI text editor inspired by GNU Nano.
 
 <a href="https://pkg.go.dev/github.com/ikasoba/saka"><img src="https://pkg.go.dev/badge/github.com/ikasoba/saka.svg" alt="Go Reference"></a>
+<a href="https://github.com/ikasoba/saka/actions/workflows/release.yml"><img src="https://github.com/ikasoba/saka/actions/workflows/release.yml/badge.svg?event=release" alt="release"></a>
 
 ![Screenshot_20250126_151937](https://github.com/user-attachments/assets/6f18a0ba-885e-433b-a80b-2c265ab4f5d1)
+
 </p>
 
 # Install from go
