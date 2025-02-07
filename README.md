@@ -31,7 +31,3 @@ Usage: saka --install-grammar
 Usage: saka --fetch-default-config
   Fetch default config
 ```
-
-# Troubleshoot
-
-## 
