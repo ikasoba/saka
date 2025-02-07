@@ -22,7 +22,7 @@ In that case, installing [tdm-gcc](https://jmeubank.github.io/tdm-gcc/) or speci
 
 (In some cases you may need to set CGO_ENABLED)
 
-## Setup
+# Setup
 In the initial state, no configuration file exists, so a default configuration file must be obtained.
 ```sh
 saka --fetch-default-config
