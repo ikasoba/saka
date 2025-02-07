@@ -620,7 +620,11 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 				}
 
 				if e.cursor.endSelection > 0 {
-					e.cursor.endSelection -= 1
+					if rope.Slice(e.Text, e.cursor.endSelection-1, 2).String() == "\r\n" {
+						e.cursor.endSelection -= 2
+					} else {
+						e.cursor.endSelection -= 1
+					}
 				}
 
 				e.cursor.hasSelection = true
@@ -630,7 +634,11 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 				}
 
 				if e.cursor.startSelection > 0 {
-					e.cursor.startSelection -= 1
+					if rope.Slice(e.Text, e.cursor.startSelection-1, 2).String() == "\r\n" {
+						e.cursor.startSelection -= 2
+					} else {
+						e.cursor.startSelection -= 1
+					}
 				}
 
 				e.cursor.hasSelection = false
@@ -643,7 +651,11 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 				}
 
 				if e.cursor.endSelection < e.Text.Length() {
-					e.cursor.endSelection += 1
+					if rope.Slice(e.Text, e.cursor.endSelection+1, 2).String() == "\r\n" {
+						e.cursor.endSelection += 2
+					} else {
+						e.cursor.endSelection += 1
+					}
 				}
 
 				e.cursor.hasSelection = true
@@ -653,7 +665,11 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 				}
 
 				if e.cursor.startSelection < e.Text.Length() {
-					e.cursor.startSelection += 1
+					if rope.Slice(e.Text, e.cursor.startSelection+1, 2).String() == "\r\n" {
+						e.cursor.startSelection += 2
+					} else {
+						e.cursor.startSelection += 1
+					}
 				}
 
 				e.cursor.hasSelection = false
@@ -667,10 +683,17 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 
 				prevLine := e.LineIndexes[e.CurrentLine]
 				prev := e.cursor.endSelection - prevLine.Start
+				if e.cursor.endSelection > 0 && rope.Slice(e.Text, e.cursor.endSelection-1, 2).String() == "\r\n" {
+					prev -= 1
+				}
 
 				i, ok := e.LineIndexes[e.CurrentLine-1]
 				if ok {
 					e.cursor.endSelection = i.Start + min(i.End-i.Start, prev)
+
+					if e.cursor.endSelection > 0 && rope.Slice(e.Text, e.cursor.endSelection, 2).String() == "\r\n" {
+						e.cursor.endSelection += 1
+					}
 				}
 
 				e.cursor.hasSelection = true
@@ -681,10 +704,17 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 
 				prevLine := e.LineIndexes[e.CurrentLine]
 				prev := e.cursor.startSelection - prevLine.Start
+				if e.cursor.startSelection > 0 && rope.Slice(e.Text, e.cursor.startSelection-1, 2).String() == "\r\n" {
+					prev -= 1
+				}
 
 				i, ok := e.LineIndexes[e.CurrentLine-1]
 				if ok {
 					e.cursor.startSelection = i.Start + min(i.End-i.Start, prev)
+
+					if e.cursor.startSelection > 0 && rope.Slice(e.Text, e.cursor.startSelection, 2).String() == "\r\n" {
+						e.cursor.startSelection += 1
+					}
 				}
 
 				e.cursor.hasSelection = false
@@ -698,10 +728,17 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 
 				prevLine := e.LineIndexes[e.CurrentLine]
 				prev := e.cursor.endSelection - prevLine.Start
+				if e.cursor.endSelection > 0 && rope.Slice(e.Text, e.cursor.endSelection-1, 2).String() == "\r\n" {
+					prev -= 1
+				}
 
 				i, ok := e.LineIndexes[e.CurrentLine+1]
 				if ok {
 					e.cursor.endSelection = i.Start + min(i.End-i.Start, prev)
+
+					if e.cursor.endSelection < e.Text.Length()-1 && rope.Slice(e.Text, e.cursor.endSelection, 2).String() == "\r\n" {
+						e.cursor.endSelection += 1
+					}
 				}
 
 				e.cursor.hasSelection = true
@@ -712,10 +749,18 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 
 				prevLine := e.LineIndexes[e.CurrentLine]
 				prev := e.cursor.startSelection - prevLine.Start
+				if e.cursor.startSelection > 0 && rope.Slice(e.Text, e.cursor.startSelection-1, 2).String() == "\r\n" {
+					prev -= 1
+				}
 
 				i, ok := e.LineIndexes[e.CurrentLine+1]
 				if ok {
+
 					e.cursor.startSelection = i.Start + min(i.End-i.Start, prev)
+
+					if e.cursor.startSelection < e.Text.Length()-1 && rope.Slice(e.Text, e.cursor.startSelection, 2).String() == "\r\n" {
+						e.cursor.startSelection += 1
+					}
 				}
 
 				e.cursor.hasSelection = false
@@ -744,9 +789,14 @@ func (e *Editor) InputHandler() func(event *tcell.EventKey, setFocus func(p tvie
 
 			if offset > 0 {
 				if !e.cursor.hasSelection {
-					e.Text = e.Text.Delete(e.cursor.startSelection-1, 1)
+					if rope.Slice(e.Text, e.cursor.startSelection-1, 2).String() == "\r\n" {
+						e.Text = e.Text.Delete(e.cursor.startSelection-1, 2)
+						e.cursor.startSelection -= 2
+					} else {
+						e.Text = e.Text.Delete(e.cursor.startSelection-1, 1)
+						e.cursor.startSelection -= 1
+					}
 
-					e.cursor.startSelection -= 1
 				} else {
 					start, end := e.cursor.startSelection, e.cursor.endSelection
 					if start > end {
