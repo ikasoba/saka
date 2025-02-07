@@ -14,6 +14,14 @@ A Cute & Easy TUI text editor inspired by GNU Nano.
 go install github.com/ikasoba/saka@latest
 ```
 
+## If you have problems installing on Windows
+
+Problems often occur if gcc is not installed.
+
+In that case, installing [tdm-gcc](https://jmeubank.github.io/tdm-gcc/) or specifying your preferred compiler in the CC, CXX environment variable may solve the problem.
+
+(In some cases you may need to set CGO_ENABLED)
+
 ## Setup
 In the initial state, no configuration file exists, so a default configuration file must be obtained.
 ```sh
