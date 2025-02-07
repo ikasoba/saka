@@ -9,6 +9,10 @@ A Cute & Easy TUI text editor inspired by GNU Nano.
 
 </p>
 
+# Releases
+
+https://github.com/ikasoba/saka/releases
+
 # Install from go
 ```sh
 go install github.com/ikasoba/saka@latest
@@ -38,10 +42,6 @@ You can check the location of the configuration file with the following command.
 ```sh
 saka -e
 ```
-
-# Releases
-
-https://github.com/ikasoba/saka/releases
 
 # Usage
 
