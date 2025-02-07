@@ -65,6 +65,33 @@ func main() {
 			}
 
 			return
+		} else if os.Args[1] == "--fetch-default-config" {
+			conf, theme, err := manager.FetchDefaultConfigs()
+			if err != nil {
+				panic(err)
+			}
+
+			d := config.GetConfigDir()
+
+			confFd, err := os.Create(filepath.Join(d, "config.toml"))
+			if err != nil {
+				panic(err)
+			}
+
+			defer confFd.Close()
+
+			confFd.ReadFrom(conf)
+
+			themeFd, err := os.Create(filepath.Join(d, "theme.toml"))
+			if err != nil {
+				panic(err)
+			}
+
+			defer themeFd.Close()
+
+			themeFd.ReadFrom(theme)
+
+			return
 		} else {
 			fileName = os.Args[1]
 		}
@@ -78,7 +105,9 @@ func main() {
 		fmt.Println("Usage:", os.Args[0], "(-e|--show-environment)")
 		fmt.Println("  Show environment variables\n")
 		fmt.Println("Usage:", os.Args[0], "--install-grammar")
-		fmt.Println("  Install grammar from config")
+		fmt.Println("  Install grammar from config\n")
+		fmt.Println("Usage:", os.Args[0], "--fetch-default-config")
+		fmt.Println("  Fetch default config")
 
 		os.Exit(1)
 
